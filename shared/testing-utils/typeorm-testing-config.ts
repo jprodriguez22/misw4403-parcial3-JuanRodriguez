@@ -1,17 +1,14 @@
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { RecetaEntity } from "../../receta/receta.entity";
-import { RestauranteEntity } from "../../restaurante/restaurante.entity";
-import { CulturaGastronomicaEntity } from "../../cultura-gastronomica/cultura-gastronomica.entity";
-import { ProductoEntity } from "../../producto/producto.entity";
-import { PaisEntity } from "../../pais/pais.entity";
+import { BibliotecaEntity } from "../../src/biblioteca/biblioteca.entity";
+import { LibroEntity } from "../../src/libro/libro.entity";
 
 export const TypeOrmTestingConfig = () => [
     TypeOrmModule.forRoot({
         type: 'sqlite',
         database: ':memory:',
         dropSchema: true,
-        entities: [RecetaEntity, RestauranteEntity, CulturaGastronomicaEntity, ProductoEntity, PaisEntity],
+        entities: [BibliotecaEntity, LibroEntity],
         synchronize: true,
     }),
-    TypeOrmModule.forFeature([RecetaEntity, RestauranteEntity, CulturaGastronomicaEntity, ProductoEntity, PaisEntity])
+    TypeOrmModule.forFeature([BibliotecaEntity, LibroEntity])
 ];

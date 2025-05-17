@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BibliotecaEntity } from './biblioteca.entity';
-import { BusinessError, BusinessLogicException } from 'shared/errors/business-errors';
+import { BusinessError, BusinessLogicException } from '../../shared/errors/business-errors';
 
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 

@@ -1,4 +1,4 @@
-import { LibroEntity } from 'src/libro/libro.entity';
+import { LibroEntity } from '../libro/libro.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm'
 
 @Entity('biblioteca')

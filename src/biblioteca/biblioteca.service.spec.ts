@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BibliotecaService } from './biblioteca.service';
 import { Repository } from 'typeorm';
-import { TypeOrmTestingConfig } from 'shared/testing-utils/typeorm-testing-config';
+import { TypeOrmTestingConfig } from '../../shared/testing-utils/typeorm-testing-config';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { faker } from '@faker-js/faker';
 import { BibliotecaEntity } from './biblioteca.entity';
@@ -18,8 +18,8 @@ describe('BibliotecaService', () => {
     for (let i = 0; i < 5; i++) {
       const biblioteca: BibliotecaEntity = await repository.save({
         nombre: faker.company.name(),
-        direccion: faker.address.streetAddress(),
-        ciudad: faker.address.city(),
+        direccion: faker.location.streetAddress(),
+        ciudad: faker.location.city(),
         horaApertura: '09:00',
         horaCierre: '18:00',
         libros: []
@@ -105,7 +105,41 @@ describe('BibliotecaService', () => {
   })
 
   it('Update a library', async () => {
-    
+    const libraryToUpdate: BibliotecaEntity = bibliotecaList[0];
+    libraryToUpdate.nombre = faker.company.name();
+
+    const result: BibliotecaEntity = await service.update(libraryToUpdate, libraryToUpdate.id);
+    expect(result).not.toBeNull();
+
+    const newLibrary: BibliotecaEntity | null = await repository.findOne({ where: { id: result.id } });
+    expect(newLibrary).not.toBeNull();
+    expect(newLibrary!.nombre).toBe(libraryToUpdate.nombre);
+  })
+
+  it('Update a library wrong time format', async () => {
+    const libraryToUpdate: BibliotecaEntity = bibliotecaList[0];
+    libraryToUpdate.horaApertura = "09"
+    await expect(() => service.update(libraryToUpdate, libraryToUpdate.id)).rejects.toHaveProperty('message', `El tiempo de apertura debe estar entre 0:00 y 23:59 horas`)
+  })
+
+  it('Update a library closing time before opening time', async () => {
+    const libraryToUpdate: BibliotecaEntity = bibliotecaList[0];
+    libraryToUpdate.horaApertura = '09:00'
+    libraryToUpdate.horaCierre = '05:00'
+    await expect(() => service.update(libraryToUpdate, libraryToUpdate.id)).rejects.toHaveProperty('message', `El tiempo de apertura debe ser menor al de cierre`)
+  })
+
+  it('Delete a library', async () => {
+    const libraryToDelete: BibliotecaEntity = bibliotecaList[0];
+    await service.delete(libraryToDelete.id);
+
+    const deletedLibrary: BibliotecaEntity | null = await repository.findOne({ where: { id: libraryToDelete.id } });
+    expect(deletedLibrary).toBeNull();
+  })
+
+  it('Delete a library that does not exist', async () => {
+    const fakeID = 342
+    await expect(() => service.delete(fakeID)).rejects.toHaveProperty('message', `La biblioteca con id ${fakeID} no existe en el sistema`)
   })
 
 });

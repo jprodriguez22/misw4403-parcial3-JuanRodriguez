@@ -1,4 +1,4 @@
-import { BibliotecaEntity } from 'src/biblioteca/biblioteca.entity';
+import { BibliotecaEntity } from '../biblioteca/biblioteca.entity';
 import { Column, Entity, ManyToMany, PrimaryColumn } from 'typeorm'
 
 @Entity('libro')
