@@ -16,7 +16,10 @@ export class BibliotecaEntity {
     ciudad: string;
 
     @Column()
-    horarioAtencion: string;
+    horaApertura: string;
+
+    @Column()
+    horaCierre: string;
 
     @ManyToMany(() => LibroEntity, libro => libro.bibliotecas)
     @JoinTable()
