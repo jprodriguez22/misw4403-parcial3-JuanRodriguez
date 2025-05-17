@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { BibliotecaEntity } from 'src/biblioteca/biblioteca.entity';
+import { Column, Entity, ManyToMany, PrimaryColumn } from 'typeorm'
 
 @Entity('libro')
 export class LibroEntity {
@@ -13,4 +14,7 @@ export class LibroEntity {
 
     @Column()
     fechaPublicacion: Date;
+
+    @ManyToMany(() => BibliotecaEntity, biblioteca => biblioteca.libros)
+    bibliotecas: BibliotecaEntity[];
 }

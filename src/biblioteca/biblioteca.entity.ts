@@ -18,7 +18,7 @@ export class BibliotecaEntity {
     @Column()
     horarioAtencion: string;
 
-    @ManyToMany(() => LibroEntity, libro => libro.isbn)
+    @ManyToMany(() => LibroEntity, libro => libro.bibliotecas)
     @JoinTable()
     libros: LibroEntity[];
 }
