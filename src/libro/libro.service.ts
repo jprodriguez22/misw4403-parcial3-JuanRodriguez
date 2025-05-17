@@ -5,7 +5,7 @@ import { BusinessError, BusinessLogicException } from 'shared/errors/business-er
 import { LibroEntity } from './libro.entity';
 
 @Injectable()
-export class BibliotecaService {
+export class LibroService {
     constructor(
         @InjectRepository(LibroEntity)
         private readonly libroRepository: Repository<LibroEntity>

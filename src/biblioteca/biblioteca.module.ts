@@ -5,6 +5,7 @@ import { BibliotecaService } from './biblioteca.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([BibliotecaEntity])],
-    providers: [BibliotecaService]
+    providers: [BibliotecaService],
+    exports: [BibliotecaService]
 })
 export class BibliotecaModule {}

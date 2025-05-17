@@ -5,6 +5,7 @@ import { LibroService } from './libro.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([LibroEntity])],
-    providers: [LibroService]
+    providers: [LibroService],
+    exports: [LibroService]
 })
 export class LibroModule {}
