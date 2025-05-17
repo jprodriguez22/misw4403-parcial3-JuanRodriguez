@@ -5,7 +5,6 @@ import { BibliotecaEntity } from './biblioteca.entity';
 import { BibliotecaDTO } from './biblioteca.dto';
 import { plainToInstance } from 'class-transformer';
 
-
 @Controller('libraries')
 @UseInterceptors(BusinessErrorsInterceptor)
 export class BibliotecaController {
