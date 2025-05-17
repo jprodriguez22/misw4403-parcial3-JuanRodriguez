@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { LibroEntity } from 'src/libro/libro.entity';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm'
 
 @Entity('biblioteca')
 export class BibliotecaEntity {
@@ -16,4 +17,8 @@ export class BibliotecaEntity {
 
     @Column()
     horarioAtencion: string;
+
+    @ManyToMany(() => LibroEntity, libro => libro.isbn)
+    @JoinTable()
+    libros: LibroEntity[];
 }
