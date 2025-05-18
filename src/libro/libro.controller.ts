@@ -7,7 +7,7 @@ import { plainToInstance } from 'class-transformer';
 
 @Controller('books')
 @UseInterceptors(BusinessErrorsInterceptor)
-export class BibliotecaController {
+export class LibroController {
     constructor(private readonly bookService: LibroService){}
 
     @Get()
@@ -15,7 +15,7 @@ export class BibliotecaController {
         return await this.bookService.findAll();
     }
 
-    @Get(':id')
+    @Get(':isbn')
     async findOne(@Param('isbn') isbn: string): Promise<LibroEntity> {
         return await this.bookService.findOne(isbn);
     }
@@ -32,7 +32,7 @@ export class BibliotecaController {
         return await this.bookService.update(libro, libro.isbn);
     }
 
-    @Delete(':id')
+    @Delete(':isbn')
     async delete(@Param('isbn') isbn: string): Promise<void> {
         await this.bookService.delete(isbn);
     }

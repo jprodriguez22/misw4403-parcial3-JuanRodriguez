@@ -24,7 +24,7 @@ export class LibroService {
     }
 
     async create(libro: LibroEntity): Promise<LibroEntity> {
-        const checkDate = libro.fechaPublicacion <= new Date();
+        const checkDate = new Date(libro.fechaPublicacion) <= new Date();
         if (!checkDate) {
             throw new BusinessLogicException(`El tiempo de publicación no puede ser mayor a la fecha actual`, BusinessError.PRECONDITION_FAILED)
         }
@@ -36,7 +36,7 @@ export class LibroService {
         if (!libroActualizar) {
             throw new BusinessLogicException(`El libro con ISBN ${isbn} no existe en el sistema`, BusinessError.NOT_FOUND)
         }
-        const checkDate = libro.fechaPublicacion <= new Date();
+        const checkDate = new Date(libro.fechaPublicacion) <= new Date();
         if (!checkDate) {
             throw new BusinessLogicException(`El tiempo de publicación no puede ser mayor a la fecha actual`, BusinessError.PRECONDITION_FAILED)
         }

@@ -44,7 +44,10 @@ export class BibliotecaService {
     }
 
     async update(biblioteca: BibliotecaEntity, id: number): Promise<BibliotecaEntity> {
-        const bibliotecaActualizar = await this.bibliotecaRepository.findOne({ where: { id } })
+        const bibliotecaActualizar = await this.bibliotecaRepository.findOne({ 
+            where: { id }, 
+        })
+
         if (!bibliotecaActualizar) {
             throw new BusinessLogicException(`La biblioteca con id ${id} no existe en el sistema`, BusinessError.NOT_FOUND)
         }
@@ -63,6 +66,7 @@ export class BibliotecaService {
         if (!checkOpeningTime) {
             throw new BusinessLogicException(`El tiempo de apertura debe ser menor al de cierre`, BusinessError.PRECONDITION_FAILED)
         }
+
         return await this.bibliotecaRepository.save({...bibliotecaActualizar, ...biblioteca});
     }
 
