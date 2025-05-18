@@ -1,0 +1,657 @@
+{
+	"info": {
+		"_postman_id": "978fbd79-6b09-4954-8e5c-365f6e1fb53b",
+		"name": "Bibliotecas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30754919",
+		"_collection_link": "https://www.postman.com/dark-rocket-805494/workspace/bc48ecfd-9520-42bd-bded-41d4e15991fb/collection/30754919-978fbd79-6b09-4954-8e5c-365f6e1fb53b?action=share&source=collection_link&creator=30754919"
+	},
+	"item": [
+		{
+			"name": "201 - Crear biblioteca",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.id).to.exist;\r",
+							"    pm.expect(responseData.nombre).to.exist;\r",
+							"    pm.expect(responseData.direccion).to.exist;\r",
+							"    pm.expect(responseData.ciudad).to.exist;\r",
+							"    pm.expect(responseData.horaApertura).to.exist;\r",
+							"    pm.expect(responseData.horaCierre).to.exist;\r",
+							"    pm.expect(responseData.libros).to.exist;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"HoraApertura and HoraCierre are in valid time format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.horaApertura).to.match(/^\\d{2}:\\d{2}$/);\r",
+							"    pm.expect(responseData.horaCierre).to.match(/^\\d{2}:\\d{2}$/);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is within an acceptable range\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Libros array is present\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.libros).to.exist.and.to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json()\r",
+							"\r",
+							"if(responseData.id) {\r",
+							"    pm.collectionVariables.set(\"lastCreatedLibraryID\", responseData.id)\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{requestPayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "412 - Crear biblioteca datos errados",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 412\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(412);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.statusCode).to.exist;\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.include(`El tiempo de apertura debe estar entre 0:00 y 23:59 horas`);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const payload = {\r",
+							"    \"id\": pm.collectionVariables.get(\"lastCreatedLibraryID\"),\r",
+							"    \"nombre\": \"{{$randomFirstName}} Library\",\r",
+							"    \"direccion\": \"{{$randomStreetAddress}}\",\r",
+							"    \"ciudad\": \"{{$randomCity}}\",\r",
+							"    \"horaApertura\": \"09\",\r",
+							"    \"horaCierre\": \"19:00\",\r",
+							"    \"libros\": []\r",
+							"}\r",
+							"\r",
+							"pm.collectionVariables.set(\"wrongPayload\", JSON.stringify(payload))"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{wrongPayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 - Obtener bibliotecas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    \r",
+							"    responseData.forEach(function(library) {\r",
+							"        pm.expect(library).to.be.an('object');\r",
+							"        pm.expect(library.id).to.exist;\r",
+							"        pm.expect(library.nombre).to.exist;\r",
+							"        pm.expect(library.direccion).to.exist;\r",
+							"        pm.expect(library.ciudad).to.exist;\r",
+							"        pm.expect(library.horaApertura).to.exist;\r",
+							"        pm.expect(library.horaCierre).to.exist;\r",
+							"        pm.expect(library.libros).to.exist;\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"HoraApertura and horaCierre are in valid time format\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  responseData.forEach(library => {\r",
+							"    pm.expect(library.horaApertura).to.match(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, \"HoraApertura should be in valid time format\");\r",
+							"    pm.expect(library.horaCierre).to.match(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, \"HoraCierre should be in valid time format\");\r",
+							"  });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 - Obtener biblioteca",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.property('id');\r",
+							"    pm.expect(responseData).to.have.property('nombre');\r",
+							"    pm.expect(responseData).to.have.property('direccion');\r",
+							"    pm.expect(responseData).to.have.property('ciudad');\r",
+							"    pm.expect(responseData).to.have.property('horaApertura');\r",
+							"    pm.expect(responseData).to.have.property('horaCierre');\r",
+							"    pm.expect(responseData).to.have.property('libros');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 - Obtener biblioteca que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.statusCode).to.exist;\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.include(`La biblioteca con id ${pm.collectionVariables.get(\"nextLibraryID\")} no existe en el sistema`);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const nextID = parseInt(pm.collectionVariables.get(\"lastCreatedLibraryID\")) + 1 \r",
+							"pm.collectionVariables.set(\"nextLibraryID\", nextID)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries/{{nextLibraryID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{nextLibraryID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 - Actualizar biblioteca",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const payload = {\r",
+							"    \"id\": pm.collectionVariables.get(\"lastCreatedLibraryID\"),\r",
+							"    \"nombre\": \"{{$randomFirstName}} Library\",\r",
+							"    \"direccion\": \"{{$randomStreetAddress}}\",\r",
+							"    \"ciudad\": \"{{$randomCity}}\",\r",
+							"    \"horaApertura\": \"09:00\",\r",
+							"    \"horaCierre\": \"19:00\",\r",
+							"    \"libros\": []\r",
+							"}\r",
+							"\r",
+							"pm.collectionVariables.set(\"updatePayload\", JSON.stringify(payload))"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.id).to.exist;\r",
+							"    pm.expect(responseData.nombre).to.exist;\r",
+							"    pm.expect(responseData.direccion).to.exist;\r",
+							"    pm.expect(responseData.ciudad).to.exist;\r",
+							"    pm.expect(responseData.horaApertura).to.exist;\r",
+							"    pm.expect(responseData.horaCierre).to.exist;\r",
+							"    pm.expect(responseData.libros).to.exist;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"HoraApertura and horaCierre are in valid time format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData.horaApertura).to.match(/^([01]\\d|2[0-3]):([0-5]\\d)$/);\r",
+							"    pm.expect(responseData.horaCierre).to.match(/^([01]\\d|2[0-3]):([0-5]\\d)$/);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{updatePayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 - Actualizar biblioteca que no existe",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const nextID = parseInt(pm.collectionVariables.get(\"lastCreatedLibraryID\")) + 1 \r",
+							"\r",
+							"const payload = {\r",
+							"    \"id\": nextID,\r",
+							"    \"nombre\": \"{{$randomFirstName}} Library\",\r",
+							"    \"direccion\": \"{{$randomStreetAddress}}\",\r",
+							"    \"ciudad\": \"{{$randomCity}}\",\r",
+							"    \"horaApertura\": \"09:00\",\r",
+							"    \"horaCierre\": \"19:00\",\r",
+							"    \"libros\": []\r",
+							"}\r",
+							"\r",
+							"pm.collectionVariables.set(\"updatePayload\", JSON.stringify(payload))"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.statusCode).to.exist;\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.include(`La biblioteca con id ${pm.environment.get(\"nextLibraryID\")} no existe en el sistema`);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{updatePayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 - Borrar biblioteca",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body follows the expected schema for DELETE request\", function () {\r",
+							"    const responseData = xml2Json(pm.response.text());    \r",
+							"    pm.expect(responseData).to.be.null;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 - Borrar biblioteca que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.statusCode).to.exist;\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.include(`La biblioteca con id ${pm.environment.get(\"nextLibraryID\")} no existe en el sistema`);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const nextID = parseInt(pm.collectionVariables.get(\"lastCreatedLibraryID\")) + 1 \r",
+							"pm.collectionVariables.set(\"nextLibraryID\", nextID)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries/{{nextLibraryID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{nextLibraryID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"const payload = {\r",
+					"    \"nombre\": \"{{$randomFirstName}} Library\",\r",
+					"    \"direccion\": \"{{$randomStreetAddress}}\",\r",
+					"    \"ciudad\": \"{{$randomCity}}\",\r",
+					"    \"horaApertura\": \"09:00\",\r",
+					"    \"horaCierre\": \"19:00\",\r",
+					"    \"libros\": []\r",
+					"}\r",
+					"\r",
+					"pm.collectionVariables.set(\"requestPayload\", JSON.stringify(payload))"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "wrongPayload",
+			"value": ""
+		},
+		{
+			"key": "requestPayload",
+			"value": ""
+		},
+		{
+			"key": "lastCreatedLibraryID",
+			"value": ""
+		},
+		{
+			"key": "nextLibraryID",
+			"value": ""
+		},
+		{
+			"key": "updatePayload",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,848 @@
+{
+	"info": {
+		"_postman_id": "e9bb4d6a-a487-4699-8738-0c1b4cce00ee",
+		"name": "Biblioteca-Libro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30754919",
+		"_collection_link": "https://www.postman.com/dark-rocket-805494/workspace/bc48ecfd-9520-42bd-bded-41d4e15991fb/collection/30754919-e9bb4d6a-a487-4699-8738-0c1b4cce00ee?action=share&source=collection_link&creator=30754919"
+	},
+	"item": [
+		{
+			"name": "201 - Crear biblioteca",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.id).to.exist;\r",
+							"    pm.expect(responseData.nombre).to.exist;\r",
+							"    pm.expect(responseData.direccion).to.exist;\r",
+							"    pm.expect(responseData.ciudad).to.exist;\r",
+							"    pm.expect(responseData.horaApertura).to.exist;\r",
+							"    pm.expect(responseData.horaCierre).to.exist;\r",
+							"    pm.expect(responseData.libros).to.exist;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"HoraApertura and HoraCierre are in valid time format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.horaApertura).to.match(/^\\d{2}:\\d{2}$/);\r",
+							"    pm.expect(responseData.horaCierre).to.match(/^\\d{2}:\\d{2}$/);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is within an acceptable range\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Libros array is present\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.libros).to.exist.and.to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json()\r",
+							"\r",
+							"if(responseData.id) {\r",
+							"    pm.collectionVariables.set(\"lastCreatedLibraryID\", responseData.id)\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{libraryPayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "201 - Crear libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.isbn).to.exist;\r",
+							"    pm.expect(responseData.titulo).to.exist;\r",
+							"    pm.expect(responseData.autor).to.exist;\r",
+							"    pm.expect(responseData.fechaPublicacion).to.exist;\r",
+							"    pm.expect(responseData.bibliotecas).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Bibliotecas array is present\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.bibliotecas).to.exist.and.to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"const responseData = pm.response.json()\r",
+							"\r",
+							"if(responseData.isbn) {\r",
+							"    pm.collectionVariables.set(\"lastCreatedBookID\", responseData.isbn)\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{bookPayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/books",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "201 - Asociar libro a biblioteca",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate the response schema for fields - id, nombre, direccion, ciudad, horaApertura, horaCierre, and libros\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.id).to.exist.and.to.be.a('number');\r",
+							"    pm.expect(responseData.nombre).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.direccion).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.ciudad).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.horaApertura).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.horaCierre).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.libros).to.exist.and.to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"ISBN is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData.libros).to.be.an('array');\r",
+							"    responseData.libros.forEach(function(book) {\r",
+							"        pm.expect(book.isbn).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ISBN should not be empty\");\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{requestPayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books/{{lastCreatedBookID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books",
+						"{{lastCreatedBookID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 - Asociar libro que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.statusCode).to.exist;\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.include(`El libro con ISBN 0000-0000-0000 no existe en el sistema`);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"nextBookID\", \"0000-0000-0000\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{wrongPayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books/{{nextBookID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books",
+						"{{nextBookID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 - Obtener libros en biblioteca",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields - isbn, titulo, autor, and fechaPublicacion\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(book) {\r",
+							"        pm.expect(book.isbn).to.exist;\r",
+							"        pm.expect(book.titulo).to.exist;\r",
+							"        pm.expect(book.autor).to.exist;\r",
+							"        pm.expect(book.fechaPublicacion).to.exist;\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"ISBN is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"\r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(book) {\r",
+							"    pm.expect(book.isbn).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ISBN should not be empty\");\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"const r = pm.response.json();\r",
+							"pm.collectionVariables.set(\"storedBooks\", JSON.stringify(r));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 - Obtener libro en biblioteca",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.property('isbn');\r",
+							"    pm.expect(responseData).to.have.property('titulo');\r",
+							"    pm.expect(responseData).to.have.property('autor');\r",
+							"    pm.expect(responseData).to.have.property('fechaPublicacion');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books/{{lastCreatedBookID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books",
+						"{{lastCreatedBookID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 - Obtener libro que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.statusCode).to.exist;\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.include(`El libro con ISBN 0000-0000-0000 no existe en la biblioteca con id ${pm.collectionVariables.get(\"lastCreatedLibraryID\")}`);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"nextBookID\", \"0000-0000-0000\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books/{{nextBookID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books",
+						"{{nextBookID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 - Actualizar libros de biblioteca",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const currentBooks = JSON.parse(pm.collectionVariables.get(\"storedBooks\"))\r",
+							"currentBooks[0].titulo = \"{{$randomFirstName}}\"\r",
+							"pm.collectionVariables.set(\"updatePayload\", JSON.stringify(currentBooks))"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate the response schema for fields - id, nombre, direccion, ciudad, horaApertura, horaCierre, and libros\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.id).to.exist.and.to.be.a('number');\r",
+							"    pm.expect(responseData.nombre).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.direccion).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.ciudad).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.horaApertura).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.horaCierre).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.libros).to.exist.and.to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"ISBN is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData.libros).to.be.an('array');\r",
+							"    responseData.libros.forEach(function(book) {\r",
+							"        pm.expect(book.isbn).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ISBN should not be empty\");\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{updatePayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 - Actualizar libros con uno que no existe",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const currentBooks = JSON.parse(pm.collectionVariables.get(\"storedBooks\"))\r",
+							"currentBooks[0].isbn = \"0000-0000-0000\"\r",
+							"pm.collectionVariables.set(\"updatePayload\", JSON.stringify(currentBooks))"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.statusCode).to.exist;\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.include(`El libro con ISBN 0000-0000-0000 no existe`);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{updatePayload}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "200 - Desasociar libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body follows the expected schema for DELETE request\", function () {\r",
+							"    const responseData = xml2Json(pm.response.text());    \r",
+							"    pm.expect(responseData).to.be.null;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{requestPayload}}"
+				},
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books/{{lastCreatedBookID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books",
+						"{{lastCreatedBookID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404 - Desasociar libro que no estaba asociado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.statusCode).to.exist;\r",
+							"    pm.expect(responseData.message).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check message\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    pm.expect(responseData.message).to.include(`El libro con ISBN 0000-0000-0000 no existe en el sistema`);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const nextID = \"0000-0000-0000\"\r",
+							"pm.collectionVariables.set(\"nextBookID\", nextID)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/libraries/{{lastCreatedLibraryID}}/books/{{nextBookID}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"libraries",
+						"{{lastCreatedLibraryID}}",
+						"books",
+						"{{nextBookID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"var fechaActual = new Date()\r",
+					"const diasRestar = Math.floor(Math.random() * 20000)\r",
+					"fechaActual.setDate(fechaActual.getDate() - diasRestar)\r",
+					"const fechaPublicacion = fechaActual.toISOString()\r",
+					"\r",
+					"const bookPayload = {\r",
+					"    \"isbn\": \"{{$randomCreditCardMask}}-{{$randomCreditCardMask}}-{{$randomCreditCardMask}}\",\r",
+					"    \"titulo\": \"{{$randomStreetAddress}}\",\r",
+					"    \"autor\": \"{{$randomFirstName}} {{$randomLastName}}\",\r",
+					"    \"fechaPublicacion\": fechaPublicacion,\r",
+					"    \"bibliotecas\": []\r",
+					"}\r",
+					"\r",
+					"pm.collectionVariables.set(\"bookPayload\", JSON.stringify(bookPayload))\r",
+					"\r",
+					"const libraryPayload = {\r",
+					"    \"nombre\": \"{{$randomFirstName}} Library\",\r",
+					"    \"direccion\": \"{{$randomStreetAddress}}\",\r",
+					"    \"ciudad\": \"{{$randomCity}}\",\r",
+					"    \"horaApertura\": \"09:00\",\r",
+					"    \"horaCierre\": \"19:00\",\r",
+					"    \"libros\": []\r",
+					"}\r",
+					"pm.collectionVariables.set(\"libraryPayload\", JSON.stringify(libraryPayload))\r",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "wrongPayload",
+			"value": ""
+		},
+		{
+			"key": "requestPayload",
+			"value": ""
+		},
+		{
+			"key": "lastCreatedLibraryID",
+			"value": ""
+		},
+		{
+			"key": "nextLibraryID",
+			"value": ""
+		},
+		{
+			"key": "updatePayload",
+			"value": ""
+		},
+		{
+			"key": "lastCreatedBookID",
+			"value": ""
+		},
+		{
+			"key": "nextBookID",
+			"value": ""
+		},
+		{
+			"key": "bookPayload",
+			"value": ""
+		},
+		{
+			"key": "libraryPayload",
+			"value": ""
+		},
+		{
+			"key": "storedBooks",
+			"value": ""
+		}
+	]
+}
